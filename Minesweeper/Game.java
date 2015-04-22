@@ -11,13 +11,15 @@ public class Game
         System.setProperty("info.gridworld.gui.frametitle", "Minesweeper");
 
         //Instantiate minefield
-        Field field = new Field(new BoundedGrid<RandomTile>(3, 3));
+        MineField field = new MineField(new BoundedGrid<Cell>(3, 3));
 
         //Randomly add in tiles
-        for (int r = 0; r < field.getGrid().getNumRows(); r++) {
-            for (int c = 0; c < field.getGrid().getNumCols(); c++) {
+        for (int r = 0; r < field.getGrid().getNumRows(); r++) 
+        {
+            for (int c = 0; c < field.getGrid().getNumCols(); c++) 
+            {
                 Location tempLoc = new Location(r, c);
-                field.add(tempLoc, new RandomTile(field, tempLoc));
+                field.add(tempLoc, new Cell(field, tempLoc));
             }
         }
         

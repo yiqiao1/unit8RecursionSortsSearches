@@ -60,18 +60,19 @@ public class Cell
     //Determines what the tile should say
     //If the tile is a mine, we set the text to XX. If it hasn't been clicked we set it to an
     //asterisk. If it has been clicked and isn't a mine, we determine how many mines are around it.
-    public String changeCell()
+    public String changeCellState()
     {
         if (selected && !isMine) 
         {
             int count = 0;
-            ArrayList<Cell> neighborTiles = field.getGrid().getNeighbors(getLocation());
+            ArrayList<Cell> neighbors = field.getGrid().getNeighbors(getLocation());
             
-            for (Cell c : neighborTiles) 
+            for (Cell c : neighbors) 
             {
                 if (c.isMine()) 
                 {
                     count++;
+                    c.changeCellState();
                 }
             }
             
@@ -83,7 +84,7 @@ public class Cell
         } 
         else 
         {
-            return "";
+            return "*";
         }
     }
 }

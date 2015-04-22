@@ -15,90 +15,47 @@ public class MineField extends World<Cell>
     public MineField(Grid gr)
     {
         super(gr);
-        initGridColorHack();
     }
 
     //When a mine tile is clicked, call the show method of the RandomTile.
     public boolean locationClicked(Location loc)
     {
-        if (gameOver) 
-        {
-            return true;
-        }
-
-        //Call show method on RandomTile();
-        Cell selectedCell = (Cell)this.getGrid().get(loc);
-        selectedCell.show();
+        Grid<Cell> gr = getGrid();
+        Cell c = (Cell)gr.get(loc);
         
-        checkIfWon();
+        if (!gameOver) 
+        {
+            c.select();
+            checkWin();
+        }
         
         return true;
     }
 
     //Determines if the player has won
-    private void checkIfWon() 
+    private void checkWin() 
     {
-        boolean finished = false;
-        int tilesNotMines = 0;
-        int tilesShown = 0;
-        int maxTiles = (getGrid().getNumCols()) * (getGrid().getNumRows());
-        ArrayList<Location> locations = this.getGrid().getOccupiedLocations();
+        ArrayList<Location> mines = this.getGrid().getOccupiedLocations();
+        int notMines = 0;
+        int selectedCells = 0;
         
-        for (Location loc : locations) 
+        for (Location loc : mines) 
         {
             Cell c = (Cell)this.getGrid().get(loc);
             
-            if (!c.isMine()) 
+            if (c.isSelected() && !c.isMine()) 
             {
-                tilesNotMines++;
+                selectedCells++;
+            }
+            else if (!c.isMine()) 
+            {
+                notMines++;
             }
         }
         
-        for (Location loc : locations) 
-        {
-            Cell c = (Cell)this.getGrid().get(loc);
-            
-            if (!(c.shown() && c.isMine())) 
-            {
-                tilesShown++;
-            }
-        }
-        
-        if (tilesShown == tilesNotMines) 
+        if (selectedCells == notMines) 
         {
             gameOver(true);
-        }
-    }
-    
-    //Enables program to change default color values allowing us to modify grid color (Very helpful!); 
-    private void initGridColorHack() 
-    {
-        Field temp;
-        try {
-            temp = java.awt.Color.class.getDeclaredField("WHITE");
-            temp.setAccessible(true);
-            whiteColor = (Color) temp.get(null);
-
-            temp = java.awt.Color.class.getDeclaredField("BLACK");
-            temp.setAccessible(true);
-            blackColor = (Color) temp.get(null);
-
-            setColorProp(whiteColor, 0, 0, 255); //Set grid color to blue (as if it's an ocean)
-            setColorProp(blackColor, 255, 255, 255); //Set text color to white for visibility
-        } catch (Exception e) {}
-    }
-
-    //Sets color of a color using reflection
-    //Used from http://pastebin.com/HM4ckaYV by Carter
-    private void setColorProp(Color c, int r, int g, int b) {
-        int clr = ((255 & 0xFF) << 24) | ((r & 0xFF) << 16) | ((g & 0xFF) << 8) | ((b & 0xFF) << 0);
-
-        try {
-            Field nClr = java.awt.Color.class.getDeclaredField("value");
-            nClr.setAccessible(true);
-            nClr.setInt(c, clr);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -114,19 +71,18 @@ public class MineField extends World<Cell>
         if (win) 
         {
             setMessage("GAME OVER! You win!");
-            setColorProp(whiteColor, 0, 255, 0);
         } 
         else 
         {
             setMessage("GAME OVER! You lose!");
-            setColorProp(whiteColor, 255, 0, 0);
         }
         gameOver = true;
         
         ArrayList<Location> locations = this.getGrid().getOccupiedLocations();
-        for (Location loc : locations) {
+        for (Location loc : locations) 
+        {
             Cell tile = (Cell)this.getGrid().get(loc);
-            tile.show();
+            tile.select();
         }
     }
 }
