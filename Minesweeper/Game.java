@@ -1,17 +1,16 @@
 import info.gridworld.grid.BoundedGrid;
 import info.gridworld.grid.Location;
 import info.gridworld.world.World;
+import java.awt.Color;
 
 public class Game
 {
-    public static void main() {
-        //Disable tooltips and other annoying things
-        System.setProperty("info.gridworld.gui.selection", "hide");
-        System.setProperty("info.gridworld.gui.tooltips", "hide");
+    public static void main() 
+    {
         System.setProperty("info.gridworld.gui.frametitle", "Minesweeper");
 
         //Instantiate minefield
-        MineField field = new MineField(new BoundedGrid<Cell>(3, 3));
+        MineField field = new MineField(new BoundedGrid<Cell>(10, 10));
 
         //Randomly add in tiles
         for (int r = 0; r < field.getGrid().getNumRows(); r++) 
@@ -19,7 +18,7 @@ public class Game
             for (int c = 0; c < field.getGrid().getNumCols(); c++) 
             {
                 Location tempLoc = new Location(r, c);
-                field.add(tempLoc, new Cell(field, tempLoc));
+                field.add(tempLoc, new Cell(field, tempLoc, Color.GREEN));
             }
         }
         

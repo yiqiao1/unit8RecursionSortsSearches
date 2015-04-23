@@ -9,19 +9,17 @@ import java.lang.reflect.*;
 public class MineField extends World<Cell>
 {
     private boolean gameOver = false;
-    private Color whiteColor, blackColor;
 
-    //Instantiate minefield and initialize color hack
+    //Instantiate minefield
     public MineField(Grid gr)
     {
         super(gr);
     }
 
-    //When a mine tile is clicked, call the show method of the RandomTile.
+    //When a mine cell is clicked, call its select method and check if the game is won
     public boolean locationClicked(Location loc)
     {
-        Grid<Cell> gr = getGrid();
-        Cell c = (Cell)gr.get(loc);
+        Cell c = (Cell)this.getGrid().get(loc);
         
         if (!gameOver) 
         {
@@ -59,20 +57,22 @@ public class MineField extends World<Cell>
         }
     }
 
-    //Disables user input and sets grid color to red
     //Iterates through all tiles, showing them so the user can see tiles with mines
     //boolean determines if the user won or lost
     public void gameOver(boolean win) 
     {
+        // if gameOver == false return nothing and end method
         if (gameOver) 
         {
             return;
         }
-        if (win) 
+        // win game
+        else if (!gameOver && win) 
         {
             setMessage("GAME OVER! You win!");
-        } 
-        else 
+        }
+        // lose game
+        else if (!(gameOver && win))
         {
             setMessage("GAME OVER! You lose!");
         }
