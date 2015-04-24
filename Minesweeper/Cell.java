@@ -1,5 +1,5 @@
 import java.awt.Color;
-import java.util.*;
+import java.util.ArrayList;
 import info.gridworld.grid.Location;
 
 public class Cell
@@ -11,8 +11,13 @@ public class Cell
     private boolean isMine; 
     private boolean selected = false;
 
-
-    //Initialize cell and determine if it's a mine using a random number generator
+    /**
+     * Initializes cell, determines if it's a mine using a random number generator
+     *
+     * @param mfield A parameter
+     * @param cellLoc A parameter
+     * @param col A parameter
+     */
     public Cell(MineField mfield, Location cellLoc, Color col)
     {
         field = mfield;
